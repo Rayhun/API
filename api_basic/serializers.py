@@ -7,8 +7,7 @@ class ArticleSerializers(serializers.Serializer):
     title = serializers.CharField(max_length=100)
     author = serializers.CharField(max_length=100)
     email = serializers.EmailField(max_length=100)
-    create_at = serializers.DateField(auto_now_add=True)
-    update_at = serializers.DateField(auto_now=True)
+    date = serializers.DateField()
 
     def create(self, validated_data):
         """ Article Create """
@@ -21,5 +20,5 @@ class ArticleSerializers(serializers.Serializer):
         instance.title = validated_data.get("title", instance.title)
         instance.author = validated_data.get("author", instance.author)
         instance.email = validated_data.get("email", instance.email)
-        instance.create_at = validated_data.get("create_at", instance.create_at)
-        instance.update_at = validated_data.get("update_at", instance.update_at)
+        instance.save()
+        return instance
