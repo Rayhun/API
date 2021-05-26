@@ -1,2 +1,2 @@
-# API
+# Django API
 DRF Learning repository 
