@@ -1,26 +1,39 @@
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
-from rest_framework.parsers import JSONParser
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import response, JsonResponse
+from django.http import JsonResponse
 from .models import Article
 from .serializers import ArticleSerializers
 
-@api_view(['GET', 'POST'])
-def article_list(request):
-    if request.method == "GET":
+
+class ArticleAPIView(APIView):
+    def get(self, request):
         article = Article.objects.all()
         serializer = ArticleSerializers(article, many=True)
         return Response(serializer.data)
-    elif request.method == "POST":
+
+    def post(self, request):
         serializer = ArticleSerializers(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['GET', 'POST'])
+# def article_list(request):
+# if request.method == "GET":
+#     article = Article.objects.all()
+#     serializer = ArticleSerializers(article, many=True)
+#     return Response(serializer.data)
+# elif request.method == "POST":
+#     serializer = ArticleSerializers(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     else:
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def article_detaile(request, pk):
