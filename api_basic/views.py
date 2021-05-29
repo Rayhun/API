@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.mixins import (
-    ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
+    ListModelMixin, CreateModelMixin, RetrieveModelMixin,
+    UpdateModelMixin, DestroyModelMixin
 )
 from rest_framework.generics import GenericAPIView
 from django.http import JsonResponse, Http404
@@ -13,7 +14,7 @@ from .serializers import ArticleSerializers
 
 class GenericApiView(
     GenericAPIView, ListModelMixin, CreateModelMixin,
-    UpdateModelMixin, RetrieveModelMixin
+    UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 ):
     serializer_class = ArticleSerializers
     queryset = Article.objects.all()
@@ -30,6 +31,9 @@ class GenericApiView(
 
     def put(self, request, id=None):
         return self.update(request, id)
+
+    def delete(self, request, id=None):
+        return self.destroy(request, id)
 
 
 
