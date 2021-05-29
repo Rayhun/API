@@ -1,10 +1,20 @@
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
+from rest_framework.mixins import ListModelMixin
+from rest_framework.generics import GenericAPIView
 from django.http import JsonResponse, Http404
 from .models import Article
 from .serializers import ArticleSerializers
+
+
+class GenericApiView(GenericAPIView, ListModelMixin):
+    serializer_class = ArticleSerializers
+    queryset = Article.objects.all()
+
+    def get(self, request):
+        return self.list(request)
 
 
 class ArticleAPIView(APIView):
