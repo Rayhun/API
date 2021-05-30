@@ -1,12 +1,14 @@
+import instance as instance
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
+from rest_framework.authtoken.models import Token
 from rest_framework.mixins import (
     ListModelMixin, CreateModelMixin, RetrieveModelMixin,
     UpdateModelMixin, DestroyModelMixin
 )
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import GenericAPIView
 from django.http import JsonResponse, Http404
@@ -20,7 +22,8 @@ class GenericApiView(
 ):
     serializer_class = ArticleSerializers
     queryset = Article.objects.all()
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     lookup_field = "id"
 
