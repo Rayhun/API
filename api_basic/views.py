@@ -6,6 +6,8 @@ from rest_framework.mixins import (
     ListModelMixin, CreateModelMixin, RetrieveModelMixin,
     UpdateModelMixin, DestroyModelMixin
 )
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import GenericAPIView
 from django.http import JsonResponse, Http404
 from .models import Article
@@ -18,6 +20,8 @@ class GenericApiView(
 ):
     serializer_class = ArticleSerializers
     queryset = Article.objects.all()
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     lookup_field = "id"
 
     def get(self, request, id=None):
